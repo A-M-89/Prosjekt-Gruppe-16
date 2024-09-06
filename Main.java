@@ -10,9 +10,18 @@ public class Main {
     public static void main(String[] args) {
         List<Room> rooms = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
+        String roomName;
 
-        System.out.print("Enter the name of the room: ");
-        String roomName = scanner.nextLine();
+        while(true) {
+            System.out.print("Enter the name of the room: ");
+            roomName = scanner.nextLine();
+
+            if (roomName.isEmpty()) {
+                System.out.println("Room name cannot be empty.");
+            } else {
+                break;
+            }
+        }
 
         rooms.add(new Room(roomName));
         System.out.println("You have added room: " + roomName + " to your list.");
