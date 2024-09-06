@@ -29,7 +29,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        // Skriv ut rom list
+        // Skriv ut rom liste
         System.out.println("List of rooms: ");
         for (Room room : rooms) {
             System.out.println(room.getName());
