@@ -1,3 +1,5 @@
+package rooms;
+
 public class SmartSocket {
 
     private final int number; // Stikkontaktnummer
