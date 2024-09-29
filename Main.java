@@ -1,5 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import rooms.Room;
+
 import java.lang.reflect.Type;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -27,7 +29,7 @@ public class Main {
 
             // Sjekker om navnet er tomt
             if (roomName.isEmpty()) {
-                System.out.println("Room name cannot be empty.");
+                System.out.println("rooms.Room name cannot be empty.");
                 continue;
             }
 
