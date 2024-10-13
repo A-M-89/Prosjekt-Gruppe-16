@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import register_and_login.AuthService;
 import rooms.Room;
 
 import java.lang.reflect.Type;
@@ -13,46 +14,93 @@ import java.util.Scanner;
 
 public class Main {
     private static final String FILE_PATH = "rooms/rooms.json";
+    private static AuthService authService = new AuthService(); // Create an instance of register_and_login.AuthService
 
     public static void main(String[] args) {
         List<Room> rooms = loadExistingRooms();
         Scanner scanner = new Scanner(System.in);
 
+        // register_and_login.User authentication loop
+        boolean authenticated = false;
+        while (!authenticated) {
+            System.out.println("Select an option: ");
+            System.out.println("1. Register");
+            System.out.println("2. Login");
+            System.out.println("3. Quit");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    registerUser(scanner);
+                    break;
+                case 2:
+                    authenticated = loginUser(scanner);
+                    break;
+                case 3:
+                    System.out.println("Exiting the program...");
+                    return; // Exit the program
+                default:
+                    System.out.println("Invalid choice, please choose again.");
+            }
+        }
+
+        // Room management loop
         while (true) {
             System.out.print("Enter new room name (or type exit to quit): ");
             String roomName = scanner.nextLine();
 
-            // Avslutter program ved "exit"
+            // Exit the program
             if (roomName.equalsIgnoreCase("exit")) {
                 break;
             }
 
-            // Sjekker om navnet er tomt
+            // Check if the name is empty
             if (roomName.isEmpty()) {
-                System.out.println("rooms.Room name cannot be empty.");
+                System.out.println("Room name cannot be empty.");
                 continue;
             }
 
-            // Sjekker om navnet allerede eksisterer
+            // Check if the room already exists
             if (roomExists(rooms, roomName)) {
-                System.out.println("\"" + roomName + "\" already exists. Please choose another name. ");
+                System.out.println("\"" + roomName + "\" already exists. Please choose another name.");
                 continue;
             }
 
-            // Lagrer nytt rom
+            // Save the new room
             rooms.add(new Room(roomName));
             System.out.println("\"" + roomName + "\" was added to the room list.");
             saveRoomToFile(rooms);
         }
 
-        // Skriver ut romliste
+        // Print the room list
         System.out.println("List of rooms: ");
         for (Room room : rooms) {
             System.out.println(room.getName());
         }
     }
 
-    // Metode som sjekker om et romnavn allerede eksisterer i listen
+    // register_and_login.User registration method
+    private static void registerUser(Scanner scanner) {
+        System.out.println("Enter your username:");
+        String username = scanner.nextLine().trim();
+        System.out.println("Enter your password:");
+        String password = scanner.nextLine().trim();
+
+        authService.registerUser(username, password);
+    }
+
+    // register_and_login.User login method
+    private static boolean loginUser(Scanner scanner) {
+        System.out.println("Enter your username:");
+        String username = scanner.nextLine().trim();
+        System.out.println("Enter your password:");
+        String password = scanner.nextLine().trim();
+
+        return authService.loginUser(username, password);
+    }
+
+    // Check if a room name already exists
     private static boolean roomExists(List<Room> rooms, String roomName) {
         for (Room room : rooms) {
             if (room.getName().equalsIgnoreCase(roomName)) {
@@ -62,7 +110,7 @@ public class Main {
         return false;
     }
 
-    // Lagrer rom i JSON-fil.
+    // Save rooms to JSON file
     private static void saveRoomToFile(List<Room> rooms) {
         Gson gson = new Gson();
         File file = new File(FILE_PATH);
@@ -74,7 +122,7 @@ public class Main {
         }
     }
 
-    // Henter rom fra JSON-fil
+    // Load rooms from JSON file
     private static List<Room> loadExistingRooms() {
         Gson gson = new Gson();
         File file = new File(FILE_PATH);
