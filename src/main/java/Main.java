@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static final String FILE_PATH = "rooms/rooms.json";
+    private static final String FILE_PATH = "rooms.json";
     private static AuthService authService = new AuthService(); // Create an instance of register_and_login.AuthService
 
     public static void main(String[] args) {
