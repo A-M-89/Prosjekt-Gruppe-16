@@ -3,10 +3,16 @@ package tests;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import rooms.Room;
 import rooms.SmartSocket;
+
 
 class SmartSocketTest {
     private SmartSocket socket;
+    private SmartSocket socket2;
+    private SmartSocket socket3;
+    private Room room;
+
 
     @BeforeEach
     void setUp() {
@@ -31,5 +37,20 @@ class SmartSocketTest {
     @Test
     void testRenameSocketEmpty() {
         assertThrows(IllegalArgumentException.class, () -> socket.setName(""), "Name cannot be empty");
+    }
+
+    @Test
+    void testDuplicateSocket(){
+        room.addSocket(socket2);
+        assertThrows(IllegalArgumentException.class, () -> room.addSocket(socket2),
+                "Socket cannot be duplicated");
+    }
+
+    @Test
+    void testDuplicateSocketName(){
+        room.addSocket(socket3);
+        SmartSocket duplicateSocketName = new SmartSocket(4, "Lamp");
+        assertThrows(IllegalArgumentException.class, () -> room.addSocket(duplicateSocketName),
+                "Sockets in the same room should not have the same name");
     }
 }
